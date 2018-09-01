@@ -29,9 +29,15 @@ class Genre
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Book", inversedBy="genres")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Book", mappedBy="genres")
      */
     private $books;
+
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 
     public function __construct()
     {
@@ -74,13 +80,12 @@ class Genre
     {
         return $this->books;
     }
-
     public function addBook(Book $book): self
     {
         if (!$this->books->contains($book)) {
             $this->books[] = $book;
+            $book->addGenre($this);
         }
-
         return $this;
     }
 

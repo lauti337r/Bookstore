@@ -35,7 +35,8 @@ class Book
     private $author;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Genre", mappedBy="books")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Genre", inversedBy="books")
+     * @ORM\JoinTable(name="genre_book")
      */
     private $genres;
 
@@ -49,9 +50,22 @@ class Book
      */
     private $votes;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Detail", mappedBy="book", orphanRemoval=true)
+     */
+    private $details;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $price;
+
+
+
     public function __construct()
     {
         $this->genres = new ArrayCollection();
+        $this->details = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,6 +102,11 @@ class Book
         return $this->author;
     }
 
+    public function setAuthor(Author $author){
+        $this->author = $author;
+        return $this;
+    }
+
     public function setAuthorId(?Author $authorId): self
     {
         $this->authorId = $authorId;
@@ -102,14 +121,12 @@ class Book
     {
         return $this->genres;
     }
-
     public function addGenre(Genre $genre): self
     {
         if (!$this->genres->contains($genre)) {
             $this->genres[] = $genre;
             $genre->addBook($this);
         }
-
         return $this;
     }
 
@@ -143,6 +160,49 @@ class Book
     public function setVotes(int $votes): self
     {
         $this->votes = $votes;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Detail[]
+     */
+    public function getDetails(): Collection
+    {
+        return $this->details;
+    }
+
+    public function addDetail(Detail $detail): self
+    {
+        if (!$this->details->contains($detail)) {
+            $this->details[] = $detail;
+            $detail->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDetail(Detail $detail): self
+    {
+        if ($this->details->contains($detail)) {
+            $this->details->removeElement($detail);
+            // set the owning side to null (unless already changed)
+            if ($detail->getBook() === $this) {
+                $detail->setBook(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }

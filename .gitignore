@@ -4,6 +4,9 @@
 /public/bundles/
 /var/
 /vendor/
+/node_modules
+/.idea
+/phpunit.xml.dist
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###

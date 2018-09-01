@@ -1,0 +1,34 @@
+{% extends 'default/index.html.twig' %}
+
+{% block title %}Hello admin {% endblock %}
+
+{% block left %}
+
+
+    {% if message is defined %}
+        <div class="alert alert-primary" role="alert">
+            {{ message }}
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-5 bg-success">
+            Add a new book
+            {{ form_start(addform) }}
+            {{ form_widget(addform) }}
+            {{ form_end(addform) }}
+        </div>
+        <div class="col-7 bg-primary">
+            {% for book in books %}
+                <b>{{ book.title }}</b><br>
+                {{ book.description }}<br>
+                Genres: {% for genre in book.genres %}
+                            {{ genre }},
+                        {% endfor %}<br>
+                    {{ book.author.name}} books from this author <br>
+                Rating: {% if book.rating is defined %}{{ book.rating }} {% else %} 0 {% endif %} ({% if book.votes is defined %}{{ book.votes }}{% else %}0{% endif %} votes)<br>
+            {%  endfor %}
+        </div>
+    </div>
+
+
+{% endblock %}

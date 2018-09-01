@@ -60,6 +60,11 @@ class User implements UserInterface
      */
     private $profilePic;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $role;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -129,10 +134,10 @@ class User implements UserInterface
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return array($this->role);
     }
 
-    public function setRoles(string $role): self
+    public function setRole(string $role): self
     {
         $this->role = $role;
 
@@ -175,5 +180,9 @@ class User implements UserInterface
         $this->password = $password;
 
         return $this;
+    }
+
+    public function getRole(){
+        return $this->role;
     }
 }

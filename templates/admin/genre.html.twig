@@ -1,0 +1,30 @@
+{% extends 'default/index.html.twig' %}
+
+{% block title %}Hello admin {% endblock %}
+
+{% block left %}
+
+
+        {% if message is defined %}
+        <div class="alert alert-primary" role="alert">
+         {{ message }}
+    </div>
+        {% endif %}
+    <div class="row">
+        <div class="col-5 bg-success">
+            Add a new genre
+            {{ form_start(addform) }}
+            {{ form_widget(addform) }}
+            {{ form_end(addform) }}
+        </div>
+        <div class="col-7 bg-primary">
+            {% for genre in genres %}
+                <b>{{ genre.name }}</b><br>
+                {{ genre.description }}<br>
+                {{ genre.books|length }} books of this genre <br>
+            {%  endfor %}
+        </div>
+    </div>
+
+
+{% endblock %}

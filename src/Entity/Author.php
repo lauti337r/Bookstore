@@ -29,19 +29,24 @@ class Author
     private $comment;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $rating;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer",nullable=true)
      */
     private $votes;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Book", mappedBy="authorId")
+     * @ORM\OneToMany(targetEntity="App\Entity\Book", mappedBy="author")
      */
     private $books;
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 
     public function __construct()
     {

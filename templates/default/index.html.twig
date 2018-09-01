@@ -9,8 +9,8 @@
 </style>
 
     <div class="row">
-        <div class="col-8">{% block left %}{% endblock left %}</div>
-        <div class="col-4">{% if not app.user %}<a href="{{ path('connect_google') }}"><img width="150" class="img-fluid mx-auto d-block" src="{{ asset('build/images/btn_google.png') }}"></a>{% endif %} </div>
+        <div class="col-9 bg-danger">{% block left %}{% endblock left %}</div>
+        <div class="col-3 bg-warning">{% if not app.user %}<a href="{{ path('connect_google') }}"><img width="150" class="img-fluid mx-auto d-block" src="{{ asset('build/images/btn_google.png') }}"></a>{% endif %} </div>
     </div>
 
 
