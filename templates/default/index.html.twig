@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ controller_name }}!{% endblock %}
+{% block title %}Hello {% endblock %}
 
 {% block body %}
     <style>
@@ -9,16 +9,9 @@
 </style>
 
     <div class="row">
-        <div class="col-8"></div>
-        <div class="col-4"><a href="{{ path('login') }}"><img width="150" class="img-fluid mx-auto d-block" src="{{ asset('build/images/btn_google.png') }}"></a></div>
+        <div class="col-8">{% block left %}{% endblock left %}</div>
+        <div class="col-4">{% if not app.user %}<a href="{{ path('connect_google') }}"><img width="150" class="img-fluid mx-auto d-block" src="{{ asset('build/images/btn_google.png') }}"></a>{% endif %} </div>
     </div>
-    <!--
-    <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'src/Controller/DefaultController.php'|file_link(0) }}">src/Controller/DefaultController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'templates/default/index.html.twig'|file_link(0) }}">templates/default/index.html.twig</a></code></li>
-    </ul>
-    -->
+
 {% endblock %}

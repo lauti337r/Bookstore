@@ -1,0 +1,9 @@
+{% extends 'default/index.html.twig' %}
+
+{% block title %}Hello {% endblock %}
+
+{% block left %}
+    <img src="{{ user.profilepic }}" width="10%"><br><br>
+Welcome, {{ user.firstname }} <br>
+
+{% endblock %}

@@ -1,10 +1,13 @@
 // assets/js/app.js
 
+require('https://sdk.accountkit.com/en_US/sdk.js');
+
 require('../css/app.css');
 
 require('../css/global.scss');
 
 console.log('Hello Webpack Encore');
+
 
 const imagesContext = require.context('../images', true, /\.(png|jpg|jpeg|gif|ico|svg|webp)$/);
 imagesContext.keys().forEach(imagesContext);
