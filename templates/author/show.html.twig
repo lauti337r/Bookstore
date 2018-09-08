@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ author.name }} info {% endblock %}
+
+{% block body %}
+
+    <div class="row mt-4 mb-4">
+        <h2><b>{{ author.name }}</b>   Rating: {{ author.rating }} ({{ author.votes }} votes)</h2>
+        {% dump(author.books) %}
+        {% for book in author.books %}
+        <div class="col-sm-8">
+            <h3>{{ book.title }}</h3>
+            {{ book.description }}
+                    </div>
+            <div class="col-sm-4">
+                <img src="{{ book.cover }}" width="100%">
+            </div>
+            {% endfor %}
+            <br>
+
+
+        </div>
+
+    </div>
+
+{% endblock body %}

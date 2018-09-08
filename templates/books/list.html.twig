@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Books{% if genre %} for genre {{ genre.name }}{% endif %} {% endblock %}
+
+{% block body %}
+    <div class="row">
+    {% for triple in books|batch(3,"%%**%%") %}
+        {% for book in triple if book != "%%**%%" %}
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 mt-4 mb-4">
+                <div class="card h-100">
+                    <a href="{{ path("bookview",{'id':book.id}) }}">
+                        <img class="card-img-top" src="{{ book.cover }}" alt="{{ book.title }}">
+                    </a>
+                    <div clasS="card-body">
+                        <h4 class="card-title">
+                            <a href="{{ path("bookview",{'id':book.id}) }}">{{ book.title }}</a>
+                        </h4>
+                        <h5>{{ book.price }}</h5>
+                        <p class="card-text">{{ book.description }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    </div>
+{% endblock body %}

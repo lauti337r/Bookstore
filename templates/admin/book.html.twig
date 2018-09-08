@@ -2,7 +2,7 @@
 
 {% block title %}Hello admin {% endblock %}
 
-{% block left %}
+{% block body %}
 
 
     {% if message is defined %}
@@ -10,25 +10,25 @@
             {{ message }}
         </div>
     {% endif %}
-    <div class="row">
-        <div class="col-5 bg-success">
+        <div class="col-6">
             Add a new book
             {{ form_start(addform) }}
             {{ form_widget(addform) }}
             {{ form_end(addform) }}
         </div>
-        <div class="col-7 bg-primary">
+        <div class="col-6">
             {% for book in books %}
-                <b>{{ book.title }}</b><br>
+                <b>{{ book.title }}</b><br> --> <a href="#"><i class="material-icons">shopping_cart</i></a>
+
+
                 {{ book.description }}<br>
                 Genres: {% for genre in book.genres %}
                             {{ genre }},
                         {% endfor %}<br>
-                    {{ book.author.name}} books from this author <br>
+                From {{ book.author.name}}<br>
                 Rating: {% if book.rating is defined %}{{ book.rating }} {% else %} 0 {% endif %} ({% if book.votes is defined %}{{ book.votes }}{% else %}0{% endif %} votes)<br>
             {%  endfor %}
         </div>
-    </div>
 
 
 {% endblock %}

@@ -15,15 +15,17 @@ class DefaultController extends AbstractController
      */
     public function index(Request $request)
     {
-        //$myGoogleAuth = new MyGoogleAuthenticator();
-
+        $em = $this->getDoctrine()->getManager();
+        $this->get('session')->set('genres',$em->getRepository('App:Genre')->findAll());
         if($this->getUser()){
             VarDumper::dump("YOU ARE AUTH");
             VarDumper::dump($this->getUser());
         }else VarDumper::dump("YOU ARE NOT AUTH");
 
+        $genres = $em->getRepository('App:Genre')->findAll();
         return $this->render('default/index.html.twig', [
-            'user' => $this->getUser()
+            'user' => $this->getUser(),
+            'genres' => $genres
         ]);
     }
 

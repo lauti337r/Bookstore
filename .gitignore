@@ -5,7 +5,7 @@
 /var/
 /vendor/
 /node_modules
-/.idea
+/.idea/
 /phpunit.xml.dist
 ###< symfony/framework-bundle ###
 

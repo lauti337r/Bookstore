@@ -39,7 +39,7 @@ class Author
     private $votes;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Book", mappedBy="author")
+     * @ORM\OneToMany(targetEntity="App\Entity\Book", mappedBy="author",fetch="EAGER")
      */
     private $books;
 

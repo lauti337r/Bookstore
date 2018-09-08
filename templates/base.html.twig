@@ -2,15 +2,94 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Bookstore{% endblock %}</title>
+        <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <script src="{{ asset('build/app.js') }}"></script>
         {% block stylesheets %}
             <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">
+            <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
             <link rel="stylesheet" href="{{ asset('build/app.css')}}">
             <link rel="stylesheet" href="{{ asset('build/global.css') }}">
+            <link rel="stylesheet" href="{{ asset('build/bootstrapbundle.css') }}">
+            <link rel="stylesheet" href="{{ asset('build/shop-hp.css') }}">
         {% endblock %}
     </head>
     <body>
-    <div class="container">
+    {% block navbar %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">Bookstore</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home
+                                <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        {% if (app.user is not null) %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('profile') }}">Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a id="seeCart" class="nav-link" href=""><i class="fa fa-shopping-cart" aria-hidden="true"></i> See cart</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('connect_google') }}">Log in with Google</a>
+                            </li>
+                        {% endif %}
+
+                        {% if(app.user.role is defined and app.user.role == 'ROLE_ADMIN') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('admin_index') }}">Admin</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    {% endblock navbar %}
+        <div class="container">
+            <div class="row">
+                <div id="menu" class="col-lg-3">
+                    <br><br>
+
+                        <div class="list-group">
+                            <a id="0" href="{{ path("list_books") }}" class="list-group-item leftMenu">All</a>
+                            {% for genre in app.session.get('genres') %}
+                            <a id="{{ genre.id }}"  href="{{ path("list_books", {genreId:genre.id}) }}" class="list-group-item leftMenu">{{ genre.name }}</a>
+                            {% endfor %}
+                        </div>
+
+                </div>
+                <!-- /.col-lg-3 -->
+
+
+                <div class="col-lg-9">
+                    {% block body %}
+
+                    {% endblock body %}
+
+                    <!-- /.row -->
+
+                </div>
+                <!-- /.col-lg-9 -->
+
+            </div>
+            <!-- /.row -->
+
+        </div>
+        <!-- /.container -->
+
+        {#
     <nav class="navbar navbar-expand-lg navbar-light bg-dark">
         <a class="navbar-brand" href="#">Bookstore webapp</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,10 +117,30 @@
         </div>
 
     </nav>
-        {% block body %}
-        {% endblock %}
-    </div>
+    #}
         {% block javascripts %}
+
+            <script type="text/javascript">
+                $(document).ready(function() {
+
+                    $('#seeCart').click(function(e){
+                       e.preventDefault();
+                       alert('Cart opened!');
+
+
+
+                    });
+
+                    {% block jsCustom %}
+                    {% endblock jsCustom %}
+
+                    });
+
+
+            </script>
+
+
         {% endblock %}
+
     </body>
 </html>

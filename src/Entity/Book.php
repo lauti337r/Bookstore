@@ -29,7 +29,7 @@ class Book
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Author", inversedBy="books")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Author", inversedBy="books",fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
@@ -59,6 +59,11 @@ class Book
      * @ORM\Column(type="float")
      */
     private $price;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $cover;
 
 
 
@@ -203,6 +208,18 @@ class Book
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getCover(): ?string
+    {
+        return $this->cover;
+    }
+
+    public function setCover(?string $cover): self
+    {
+        $this->cover = $cover;
 
         return $this;
     }
