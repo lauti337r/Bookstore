@@ -8,8 +8,19 @@
     <div class="row mt-4 mb-4">
         <div class="col-sm-8">
             <h2><b>{{ book.title }}</b>   Rating: {{ book.rating }} ({{ book.votes }} votes)
-                <a id="addBook" href=""><i class="fa fa-cart-plus" aria-hidden="true"></i></a>
+                <a id="addBook" book-id="{{ book.id }}" href=""><i class="fa fa-cart-plus" aria-hidden="true"></i></a>
             </h2>
+            <h5>
+                <div class="container">
+                    <div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
+                        <input class="star" type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 star"></label>
+                        <input class="star" type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 star"></label>
+                        <input class="star" type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 star"></label>
+                        <input class="star" type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 star"></label>
+                        <input class="star" type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"></label>
+                    </div>
+                </div>
+            </h5>
             <h3><i><a href="{{ path('author_show',{authorId:book.author.id}) }}">{{ book.author }}</a></i></h3>
             {% for genre in book.genres %}
                 {% if not loop.last %}
@@ -20,25 +31,92 @@
             {% endfor %}
             <br>
             {{ book.description }}
-            {{ dump(book) }}
 
         </div>
         <div class="col-sm-4">
             <img src="{{ book.cover }}" width="100%">
         </div>
     </div>
+    {% block javascripts %}
+
+    {% endblock javascripts %}
+
+
     <script type="text/javascript">
-    {% block jsCustom %}
+        $(document).ready(function() {
+
+            var c = {{ book.rating }};
+            while(c > 0){
+                $('label[for=\'star'+c+'\']').css('color','gold');
+                c--;
+            }
 
 
-            $('#addBook').click(function(e){
+
+            $('.star').click(function(e){
                 e.preventDefault();
-                alert("Book to add");
+                var vote = $(this).val();
+                var url = '{{ path('add_book_vote') }}';
+                var bookId = {{ book.id }};
+                var userId = {{ app.user.id}};
+                $.ajax({
+                    method: 'POST',
+                    url,
+                    data:{
+                        vote: vote,
+                        bookId: bookId,
+                        userId: userId
+                    },
+                    dataType:'json'
+                });
+            });
+
+
+            $('#addBook').click(function (e) {
+                e.preventDefault();
+                var bookId = $(this).attr('book-id');
+                var newBook = true;
+                if($('tr#'+bookId).length > 0){
+                    newBook = false;
+                }else newBook = true;
+                $.ajax({
+                    method: 'POST',
+                    url: '{{ path('add_to_cart') }}',
+                    dataType: 'json',
+                    data: {'bookId':bookId},
+                    success: function(response){
+                        if(!newBook){
+                            alert("not new");
+                            if($('tr#'+bookId+' td#title').length > 0)
+                                alert("found");
+                            else alert("not found");
+                            $('tr#'+bookId+' > td#title').replaceWith(response.book.title+ " ("+response.book.author+") - "+response.quantity);
+                            $('tr#'+bookId+' > td#subtotal').replaceWith(response.book.total*response.quantity);
+                        }else{
+                            $('#booksOnCart tr:last').after('<tr id="'+response.book.id+'"><td>' +response.book.title+ ' ('+response.book.author+') - '+response.quantity+'</td><td id="subtotal"><b>'+response.book.total*response.quantity+'<b></td></tr>');
+
+                        }
+                        if(response.success) {
+                            $.ajax({
+                                method: 'POST',
+                                url: '{{ path('get_book') }}',
+                                dataType: 'json',
+                                data: {'bookId': bookId},
+                                success: function (response) {
+                                    var li = '<li>' + response.title + ' (' + response.author + ') <b>' + response.price+'</li>';
+                                    $('#cartList ul').append(li);
+                                }
+                            });
+                        }else alert('There was an error adding the book to the cart!');
+                    },
+                    error: function(){
+                        alert('There was an error. Log out and run!');
+                    }
+                });
 
 
 
             });
-    {% endblock jsCustom %}
+        });
     </script>
-
 {% endblock body %}

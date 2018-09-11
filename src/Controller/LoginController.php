@@ -26,6 +26,13 @@ class LoginController extends Controller
     }
 
     /**
+     * @Route("/logout",name="logout")
+     */
+    public function logout(){
+        return $this->render('default/index.html.twig');
+    }
+
+    /**
      * @Route("/connectGoogle", name="connect_google")
      */
     public function connectGoogle()
@@ -66,7 +73,7 @@ class LoginController extends Controller
                 // the exact class depends on which provider you're using
                 /** @var \League\OAuth2\Client\Provider\GoogleUser $user */
                 $user = $client->fetchUserFromToken($accessToken);
-                $this->getUser();
+//                $this->getUser();
 
                 VarDumper::dump($user);
                 $existingUser = $this->getDoctrine()->getManager()->getRepository('App:User')

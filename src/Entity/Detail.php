@@ -23,7 +23,7 @@ class Detail
     private $book;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default" : 0})
      */
     private $quantity;
 
@@ -72,5 +72,14 @@ class Detail
         $this->cart = $cart;
 
         return $this;
+    }
+
+    public function incrQuant(){
+        $this->quantity += 1;
+    }
+
+    public function getSubTotal(){
+        $book = $this->getBook();
+        return ($this->getQuantity() * $book->getPrice());
     }
 }

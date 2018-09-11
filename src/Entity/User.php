@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -64,6 +66,29 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $role;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Cart", cascade={"persist", "remove"})
+     */
+    private $cart;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Voteauthor", mappedBy="user", orphanRemoval=true)
+     */
+    private $voteauthors;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Votebook", mappedBy="user", orphanRemoval=true)
+     */
+    private $votebooks;
+
+    public function __construct()
+    {
+        $this->voteauthors = new ArrayCollection();
+        $this->votebooks = new ArrayCollection();
+    }
+
+
 
     public function getId(): ?int
     {
@@ -184,5 +209,79 @@ class User implements UserInterface
 
     public function getRole(){
         return $this->role;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): self
+    {
+        $this->cart = $cart;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Voteauthor[]
+     */
+    public function getVoteauthors(): Collection
+    {
+        return $this->voteauthors;
+    }
+
+    public function addVoteauthor(Voteauthor $voteauthor): self
+    {
+        if (!$this->voteauthors->contains($voteauthor)) {
+            $this->voteauthors[] = $voteauthor;
+            $voteauthor->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoteauthor(Voteauthor $voteauthor): self
+    {
+        if ($this->voteauthors->contains($voteauthor)) {
+            $this->voteauthors->removeElement($voteauthor);
+            // set the owning side to null (unless already changed)
+            if ($voteauthor->getUser() === $this) {
+                $voteauthor->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Votebook[]
+     */
+    public function getVotebooks(): Collection
+    {
+        return $this->votebooks;
+    }
+
+    public function addVotebook(Votebook $votebook): self
+    {
+        if (!$this->votebooks->contains($votebook)) {
+            $this->votebooks[] = $votebook;
+            $votebook->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVotebook(Votebook $votebook): self
+    {
+        if ($this->votebooks->contains($votebook)) {
+            $this->votebooks->removeElement($votebook);
+            // set the owning side to null (unless already changed)
+            if ($votebook->getUser() === $this) {
+                $votebook->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

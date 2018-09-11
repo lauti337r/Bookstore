@@ -51,12 +51,31 @@ class Cart
         return $this;
     }
 
+    public function getTotal(){
+        $total = 0;
+        foreach($this->getDetails() as $detail){
+            $total += $detail->getSubTotal();
+        }
+
+        return $total;
+    }
+
     /**
      * @return Collection|Detail[]
      */
     public function getDetails(): Collection
     {
         return $this->details;
+    }
+
+
+    public function findBook($bookId){
+        foreach($this->getDetails() as $detail){
+            $book = $detail->getBook();
+            if($book->getId() == $bookId)
+                return $detail;
+        }
+        return false;
     }
 
     public function addDetail(Detail $detail): self
@@ -80,5 +99,13 @@ class Cart
         }
 
         return $this;
+    }
+
+    public function clear(){
+        foreach($this->getDetails() as $detail){
+            $detail->setCart(null);
+            $this->details->removeElement($detail);
+
+        }
     }
 }

@@ -60,6 +60,26 @@ class BookController extends AbstractController
     }
 
     /**
+     * @Route("/getBook",name="get_book",methods={"POST"}))
+     */
+    public function getBook(Request $request){
+        $em = $this->getDoctrine()->getManager();
+
+        $bookId = $request->request->get('bookId');
+        VarDumper::dump($bookId);
+
+        $book = $em->getRepository('App:Book')->find($bookId);
+        $author = $book->getAuthor();
+        $response = [
+            'bookId' => $book->getId(),
+            'title' => $book->getTitle(),
+            'author' => $author->getName(),
+            'price' => $book->getPrice()
+        ];
+        return new JsonResponse($response);
+    }
+
+    /**
      * @Route("/book/{id}",name="bookview")
      */
     public function viewBook($id){

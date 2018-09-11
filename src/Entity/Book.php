@@ -41,16 +41,6 @@ class Book
     private $genres;
 
     /**
-     * @ORM\Column(type="float")
-     */
-    private $rating;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $votes;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Detail", mappedBy="book", orphanRemoval=true)
      */
     private $details;
@@ -65,12 +55,26 @@ class Book
      */
     private $cover;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Votebook", mappedBy="book", orphanRemoval=true)
+     */
+    private $uservotes;
+
+
+    public function getRating(){
+        $sum = 0;
+        foreach($this->getUservotes() as $vote){
+            $sum += $vote->getVote();
+        }
+        return $sum/$this->getVotes();
+    }
 
 
     public function __construct()
     {
         $this->genres = new ArrayCollection();
         $this->details = new ArrayCollection();
+        $this->uservotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,10 +149,7 @@ class Book
         return $this;
     }
 
-    public function getRating(): ?float
-    {
-        return $this->rating;
-    }
+
 
     public function setRating(float $rating): self
     {
@@ -157,17 +158,10 @@ class Book
         return $this;
     }
 
-    public function getVotes(): ?int
-    {
-        return $this->votes;
+    public function getVotes(){
+        return $this->getUservotes()->count();
     }
 
-    public function setVotes(int $votes): self
-    {
-        $this->votes = $votes;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Detail[]
@@ -220,6 +214,37 @@ class Book
     public function setCover(?string $cover): self
     {
         $this->cover = $cover;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Votebook[]
+     */
+    public function getUservotes(): Collection
+    {
+        return $this->uservotes;
+    }
+
+    public function addUservote(Votebook $uservote): self
+    {
+        if (!$this->uservotes->contains($uservote)) {
+            $this->uservotes[] = $uservote;
+            $uservote->setBook($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUservote(Votebook $uservote): self
+    {
+        if ($this->uservotes->contains($uservote)) {
+            $this->uservotes->removeElement($uservote);
+            // set the owning side to null (unless already changed)
+            if ($uservote->getBook() === $this) {
+                $uservote->setBook(null);
+            }
+        }
 
         return $this;
     }

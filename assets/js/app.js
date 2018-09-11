@@ -8,7 +8,7 @@ require('../css/global.scss');
 
 require('../css/bootstrap.css');
 
-console.log('Hello Webpack Encore');
+//console.log('Hello Webpack Encore');
 
 
 const imagesContext = require.context('../images', true, /\.(png|jpg|jpeg|gif|ico|svg|webp)$/);

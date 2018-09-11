@@ -29,19 +29,14 @@ class Author
     private $comment;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
-     */
-    private $rating;
-
-    /**
-     * @ORM\Column(type="integer",nullable=true)
-     */
-    private $votes;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Book", mappedBy="author",fetch="EAGER")
      */
     private $books;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Voteauthor", mappedBy="author", orphanRemoval=true)
+     */
+    private $uservotes;
 
     public function __toString()
     {
@@ -51,6 +46,7 @@ class Author
     public function __construct()
     {
         $this->books = new ArrayCollection();
+        $this->uservotes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,28 +78,18 @@ class Author
         return $this;
     }
 
-    public function getRating(): ?float
+    public function getRating()
     {
-        return $this->rating;
+        $sum = 0;
+        foreach($this->getUservotes() as $vote){
+            $sum += $vote->getVote();
+        }
+        return $sum/$this->getUservotes()->count();
     }
 
-    public function setRating(float $rating): self
+    public function getVotes()
     {
-        $this->rating = $rating;
-
-        return $this;
-    }
-
-    public function getVotes(): ?int
-    {
-        return $this->votes;
-    }
-
-    public function setVotes(int $votes): self
-    {
-        $this->votes = $votes;
-
-        return $this;
+        return $this->getUservotes()->count();
     }
 
     /**
@@ -131,6 +117,37 @@ class Author
             // set the owning side to null (unless already changed)
             if ($book->getAuthorId() === $this) {
                 $book->setAuthorId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Voteauthor[]
+     */
+    public function getUservotes(): Collection
+    {
+        return $this->uservotes;
+    }
+
+    public function addUservote(Voteauthor $uservote): self
+    {
+        if (!$this->uservotes->contains($uservote)) {
+            $this->uservotes[] = $uservote;
+            $uservote->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUservote(Voteauthor $uservote): self
+    {
+        if ($this->uservotes->contains($uservote)) {
+            $this->uservotes->removeElement($uservote);
+            // set the owning side to null (unless already changed)
+            if ($uservote->getAuthor() === $this) {
+                $uservote->setAuthor(null);
             }
         }
 
