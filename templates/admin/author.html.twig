@@ -1,23 +1,24 @@
-{% extends 'default/index.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Hello admin {% endblock %}
 
-{% block left %}
+{% block body %}
 
-
+<div class="container">
     {% if message is defined %}
         <div class="alert alert-primary" role="alert">
             {{ message }}
         </div>
+
     {% endif %}
     <div class="row">
-        <div class="col-5 bg-success">
+        <div class="col-6">
             Add a new author
             {{ form_start(addform) }}
             {{ form_widget(addform) }}
             {{ form_end(addform) }}
         </div>
-        <div class="col-7 bg-primary">
+        <div class="col-6">
             {% for author in authors %}
                 <b>{{ author.name }}</b><br>
                 {{ author.comment }}<br>
@@ -26,6 +27,6 @@
             {%  endfor %}
         </div>
     </div>
-
+</div>
 
 {% endblock %}

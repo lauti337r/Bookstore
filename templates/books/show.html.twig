@@ -7,7 +7,7 @@
 {% block body %}
     <div class="row mt-4 mb-4">
         <div class="col-sm-8">
-            <h2><b>{{ book.title }}</b>   Rating: {{ book.rating }} ({{ book.votes }} votes)
+            <h2><b>{{ book.title }}</b>   Rating: {% if book.rating is not null %} {{ book.rating }}{% else %} no votes {% endif %} ({{ book.votes }} votes)
                 <a id="addBook" book-id="{{ book.id }}" href=""><i class="fa fa-cart-plus" aria-hidden="true"></i></a>
             </h2>
             <h5>

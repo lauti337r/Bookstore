@@ -231,6 +231,15 @@ class User implements UserInterface
         return $this->voteauthors;
     }
 
+    public function getAuthorVote($authorId){
+        foreach($this->voteauthors as $voteAuthor){
+            if($voteAuthor->getAuthor()->getId() == $authorId){
+                return $voteAuthor->getVote();
+            }
+        }
+        return null;
+    }
+
     public function addVoteauthor(Voteauthor $voteauthor): self
     {
         if (!$this->voteauthors->contains($voteauthor)) {

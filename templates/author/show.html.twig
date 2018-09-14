@@ -5,7 +5,7 @@
 {% block body %}
 
     <div class="row mt-4 mb-4">
-        <h2><b>{{ author.name }}</b>
+        <h2><b>{{ author.name }}</b>  Rating: {% if author.rating != -1 %} {{ author.rating }}{% else %} no votes {% endif %}
         </h2>
         <h5>
                 <div class="container">
@@ -16,8 +16,8 @@
                         <input class="star" type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 star"></label>
                         <input class="star" type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star"></label>
                     </div>
-                    ({{ author.votes }} {% if author.votes != 1 %} votes {% else %} vote {% endif %})
-
+                    ({{ author.votes }} {% if author.votes != 1 %} votes{% else %} vote{% endif %})
+                    <br>Your vote: {{ app.user.getauthorvote(author.id) }}
                 </div>
             </h5>
         <br>

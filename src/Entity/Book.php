@@ -66,7 +66,7 @@ class Book
         foreach($this->getUservotes() as $vote){
             $sum += $vote->getVote();
         }
-        return $sum/$this->getVotes();
+        return ($sum != 0 ? $sum/$this->getVotes() : -1);
     }
 
 

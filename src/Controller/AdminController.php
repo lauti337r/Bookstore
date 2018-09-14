@@ -57,8 +57,8 @@ class AdminController extends AbstractController
             $existingAuthor = $em->getRepository('App:Author')->findOneBy(['name' => $newAuthor->getName()]);
 
             if(!$existingAuthor) {
-                $newAuthor->setRating(0);
-                $newAuthor->setVotes(0);
+                //$newAuthor->setRating(0);
+                //$newAuthor->setVotes(0);
                 $em->persist($newAuthor);
                 $em->flush();
             }
@@ -144,8 +144,8 @@ class AdminController extends AbstractController
                 'author' => $newBook->getAuthor()
             ]);
             if(!$existingBook){
-                $newBook->setVotes(0);
-                $newBook->setRating(0);
+                //$newBook->setVotes(0);
+                //$newBook->setRating(0);
                 VarDumper::dump($newBook);
                 $em->persist($newBook);
                 $em->flush();

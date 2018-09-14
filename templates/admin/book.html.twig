@@ -1,15 +1,16 @@
-{% extends 'default/index.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Hello admin {% endblock %}
 
 {% block body %}
 
-
+<div class="container">
     {% if message is defined %}
         <div class="alert alert-primary" role="alert">
             {{ message }}
         </div>
     {% endif %}
+    <div class="row">
         <div class="col-6">
             Add a new book
             {{ form_start(addform) }}
@@ -18,7 +19,7 @@
         </div>
         <div class="col-6">
             {% for book in books %}
-                <b>{{ book.title }}</b><br> --> <a href="#"><i class="material-icons">shopping_cart</i></a>
+                <b>{{ book.title }}</b><br>
 
 
                 {{ book.description }}<br>
@@ -29,6 +30,6 @@
                 Rating: {% if book.rating is defined %}{{ book.rating }} {% else %} 0 {% endif %} ({% if book.votes is defined %}{{ book.votes }}{% else %}0{% endif %} votes)<br>
             {%  endfor %}
         </div>
-
-
+    </div>
+</div>
 {% endblock %}

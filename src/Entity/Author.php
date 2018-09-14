@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AuthorRepository")
@@ -84,7 +85,8 @@ class Author
         foreach($this->getUservotes() as $vote){
             $sum += $vote->getVote();
         }
-        return $sum/$this->getUservotes()->count();
+
+        return ($sum != 0 ? $sum/$this->getUservotes()->count() : -1);
     }
 
     public function getVotes()
